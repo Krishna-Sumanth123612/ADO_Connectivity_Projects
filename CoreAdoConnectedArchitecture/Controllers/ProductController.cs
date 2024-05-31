@@ -99,5 +99,39 @@ namespace CoreAdoConnectedArchitecture.Controllers
 
             return View(product);
         }
+
+        [HttpPost]
+        public IActionResult Edit(Product model, int id)
+        {
+            if (ModelState.IsValid)
+            {
+                string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "Update Product Set Productname=@name,ProductPrice=@price," +
+                        " ProductQuantity = @quantity Where ProductId = " + id;
+                    using(SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        try
+                        {
+                            command.Parameters.AddWithValue("@name", model.ProductName);
+                            command.Parameters.AddWithValue("@price", model.ProductPrice);
+                            command.Parameters.AddWithValue("@quantity", model.ProductQuantity);
+                            int result = command.ExecuteNonQuery();
+                            if (result > 0)
+                            {
+                                return RedirectToAction("Index");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ViewBag.ErrorMessage = ex.Message;
+                        }
+                    }
+                }
+            }
+            return View();
+        }
     }
 }
