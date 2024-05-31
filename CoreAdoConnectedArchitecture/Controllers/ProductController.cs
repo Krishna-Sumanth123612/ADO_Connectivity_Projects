@@ -160,5 +160,61 @@ namespace CoreAdoConnectedArchitecture.Controllers
 
             return View(product);
         }
+
+        public IActionResult Delete(int id)
+        {
+            Product product = new Product();
+            string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "Select * from Product Where ProductId=@id";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            product.ProductId = Convert.ToInt32(reader["ProductId"].ToString());
+                            product.ProductName = reader["ProductName"].ToString();
+                            product.ProductPrice = Convert.ToDecimal(reader["ProductPrice"].ToString());
+                            product.ProductQuantity = Convert.ToInt32(reader["ProductQuantity"].ToString());
+                        }
+                    }
+                }
+            }
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Product model, int id)
+        {
+            string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "Delete from Product Where ProductId = " + id;
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    try
+                    {
+                        int result = command.ExecuteNonQuery();
+                        if (result > 0)
+                        {
+                            return RedirectToAction("Index");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.ErrorMessage = ex.Message;
+                    }
+                }
+            }
+            return View();
+                
+        }
+
     }
 }
