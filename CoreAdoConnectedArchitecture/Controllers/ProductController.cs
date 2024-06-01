@@ -7,10 +7,16 @@ namespace CoreAdoConnectedArchitecture.Controllers
 {
     public class ProductController : Controller
     {
+        public IConfiguration Configuration { get; }
+        public ProductController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public IActionResult Index()
         {
             List<Product> ProductList = new List<Product>();
-            string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
+            //string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
+            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
@@ -46,6 +52,7 @@ namespace CoreAdoConnectedArchitecture.Controllers
         [HttpPost]
         public IActionResult Create(Product model)
         {
+            //string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             SqlConnection connection = new SqlConnection(connectionString);
             try
@@ -76,8 +83,9 @@ namespace CoreAdoConnectedArchitecture.Controllers
         public IActionResult Edit(int id)
         {
             Product product = new Product();
+            //string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
-            using(SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 string query = "Select * from Product Where ProductId=@id";
@@ -137,6 +145,7 @@ namespace CoreAdoConnectedArchitecture.Controllers
         public IActionResult Details(int id)
         {
             Product product = new Product();
+            //string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -164,6 +173,7 @@ namespace CoreAdoConnectedArchitecture.Controllers
         public IActionResult Delete(int id)
         {
             Product product = new Product();
+            //string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -191,7 +201,9 @@ namespace CoreAdoConnectedArchitecture.Controllers
         [HttpPost]
         public IActionResult Delete(Product model, int id)
         {
+            //string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
             string connectionString = "Data Source=LAPTOP-K1ET6H70;Initial Catalog=SampleDb;Integrated Security=true;";
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
