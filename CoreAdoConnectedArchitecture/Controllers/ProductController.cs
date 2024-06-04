@@ -25,37 +25,81 @@ namespace CoreAdoConnectedArchitecture.Controllers
         [HttpPost]
         public IActionResult Create(Product model)
         {
-            productDAL.AddProduct(model);
-            return RedirectToAction("Index");
+            try
+            {
+                productDAL.AddProduct(model);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
         }
 
         public IActionResult Edit(int id)
         {
-            return View(productDAL.GetProduct(id));
+            Product product = productDAL.GetProduct(id);
+            if (product != null)
+            {
+                return View(product);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [HttpPost]
         public IActionResult Edit(int id, Product model)
         {
-            productDAL.EditProduct(id, model);
-            return RedirectToAction("Index");
+            try
+            {
+                productDAL.EditProduct(id, model);
+                return RedirectToAction("Index");
+            }catch(Exception ex)
+            {
+                return View();
+            }
         }
 
         public IActionResult Details(int id)
         {
-            return View(productDAL.GetProduct(id));
+            Product product = productDAL.GetProduct(id);
+            if (product != null)
+            {
+                return View(product);
+            }
+            else {
+                return RedirectToAction("Index");
+            }
         }
 
         public IActionResult Delete(int id)
         {
-            return View(productDAL.GetProduct(id));
+            Product product = productDAL.GetProduct(id);
+            if (product != null)
+            {
+                return View(product);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [HttpPost]
         public IActionResult Delete(Product model, int id)
         {
-            productDAL.DeleteProduct(id);
-            return RedirectToAction("Index");
+            try
+            {
+                productDAL.DeleteProduct(id);
+                return RedirectToAction("Index");
+            }catch(Exception ex)
+            {
+                return View();
+            }
                 
         }
 
